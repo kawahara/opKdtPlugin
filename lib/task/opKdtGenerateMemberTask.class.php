@@ -11,7 +11,7 @@ class opKdtGenerateMemberTask extends sfBaseTask
     $this->addOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev');
     $this->addOption('link', 'l', sfCommandOption::PARAMETER_REQUIRED, 'Who links?', null);
     $this->addOption('name-format', null, sfCommandOption::PARAMETER_REQUIRED, "Member's Name format", 'dummy%d');
-    $this->addOption('number', 'n', sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
+    $this->addOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
   }
 
   protected function execute($arguments = array(), $options = array())
