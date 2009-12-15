@@ -7,6 +7,8 @@ class opKdtGenerateCommunityTask extends sfBaseTask
     $this->namespace = 'opKdt';
     $this->name      = 'generate-community';
 
+    require sfConfig::get('sf_data_dir').'/version.php';
+
     $this->addOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', true);
     $this->addOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev');
     $this->addOption('name-format', null, sfCommandOption::PARAMETER_REQUIRED, "Member's Name format", 'dummy%d');
@@ -59,7 +61,16 @@ class opKdtGenerateCommunityTask extends sfBaseTask
       $communityMember = new CommunityMember();
       $communityMember->setCommunity($community);
       $communityMember->setMember($adminMember);
-      $communityMember->setPosition('admin');
+
+      if (version_compare(OPENPNE_VERSION, '3.3.1-dev', '>='))
+      {
+        $communityMember->addPosition('admin');
+      }
+      else
+      {
+        $communityMember->setPosition('admin');
+      }
+
       $communityMember->save();
       $this->logSection('community+', $community->getName());
     }
