@@ -14,7 +14,7 @@ class opKdtGenerateCommunityTask extends sfBaseTask
     $this->addOption('name-format', null, sfCommandOption::PARAMETER_REQUIRED, "Member's Name format", 'dummy%d');
     $this->addOption('admin-member', 'a', sfCommandOption::PARAMETER_REQUIRED, "Admin member Id", 1);
     $this->addOption('category', 'c', sfCommandOption::PARAMETER_REQUIRED, "Category Id", 2);
-    $this->addOption('number', 'n', sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
+    $this->addOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
   }
 
   protected function execute($arguments = array(), $options = array())
