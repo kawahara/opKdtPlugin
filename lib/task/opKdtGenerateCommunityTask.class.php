@@ -47,8 +47,19 @@ class opKdtGenerateCommunityTask extends sfBaseTask
 
       $configData = array(
         array('description', $community->getName()),
-        array('register_poricy', 'open'),
       );
+
+      if (version_compare(OPENPNE_VERSION, '3.5.0-dev', '>='))
+      {
+        // new version
+        $configData[] = array('register_policy', 'open');
+      }
+      else
+      {
+        // old version
+        $configData[] = array('register_poricy', 'open');
+      }
+
       foreach ($configData as $config)
       {
         $communityConfig = new CommunityConfig();
