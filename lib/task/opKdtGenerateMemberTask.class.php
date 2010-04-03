@@ -48,11 +48,13 @@ class opKdtGenerateMemberTask extends sfBaseTask
         $memberRelationship1->setMember($member);
         $memberRelationship1->setMemberRelatedByMemberIdFrom($linkMember);
         $memberRelationship1->setIsFriend(true);
+        $memberRelationship1->save();
 
         $memberRelationship2 = new MemberRelationship();
         $memberRelationship2->setMember($linkMember);
         $memberRelationship2->setMemberRelatedByMemberIdFrom($member);
         $memberRelationship2->setIsFriend(true);
+        $memberRelationship2->save();
         $this->logSection('friend link', sprintf("%s - %s", $linkMember->getId(), $member->getId()));
       }
     }
