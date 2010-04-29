@@ -25,7 +25,38 @@ OpenPNE3.2.x-3.5.x用です。
 メンバー
 --------
 
-opKdt:generate-member
+**opKdt:generate-member**
+
+ダミーメンバーを作成する。メールアドレスはPC/携帯ともに sns{id}@example.com がセットされ、パスワードは password がセットされる。
+
+また、デフォルトではメンバー名は「dymmy{id}」となる。
+
+例
+~~
+
+::
+
+  $ php symfony opKdt:generate-member
+
+ダミーメンバーを10作成する。
+
+::
+
+  $ php symfony opKdt:generate-member --number=100
+
+ダミーメンバーを100作成する。
+
+::
+
+  $ php symfony opKdt:generate-member --link=1
+
+メンバーIDが1のメンバーとフレンドリンクしたダミーメンバーを10作成する。
+
+::
+
+  $ php symfony opKdt:generate-member --name-format="hoge%d"
+
+メンバー名が hoge{id} のダミーメンバーを10作成する。
 
 コミュニティ
 ------------
