@@ -1,4 +1,7 @@
-========
+=================
+About opKdtPlugin
+=================
+
 はじめに
 ========
 
@@ -18,7 +21,6 @@ Kawahara用OpenPNE3開発支援ツール
 
 OpenPNE3.2.x-3.5.x用です。
 
-========================
 テストデータ挿入用タスク
 ========================
 
@@ -65,7 +67,7 @@ opKdt:generate-community
 opKdt:generate-community-topic
 
 日記
-------------
+----
 
 opKdt:generate-diary
 opKdt:generate-diary-comment
@@ -76,21 +78,21 @@ opKdt:generate-diary-comment
 opKdt:send-message
 
 あしあと
-------------
+--------
 
 opKdt:put-footprint
 
 フレンドにする
-------------
+--------------
 
 opKdt:make-friend
 
 コミュニティに参加する
-------------
+----------------------
 
 opKdt:join-community
 
 上記すべてを実行
-------------
+----------------
 
 opKdt:generate-all
