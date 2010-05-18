@@ -12,6 +12,8 @@ class opKdtGenerateMemberTask extends sfBaseTask
     $this->addOption('link', 'l', sfCommandOption::PARAMETER_REQUIRED, 'Who links?', null);
     $this->addOption('name-format', null, sfCommandOption::PARAMETER_REQUIRED, "Member's Name format", 'dummy%d');
     $this->addOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
+    $this->addOption('mail-address-format', null, sfCommandOption::PARAMETER_REQUIRED, 'Mail-Address format', 'sns%d@example.com');
+    $this->addOption('password-format', null, sfCommandOption::PARAMETER_REQUIRED, 'Password format', 'password');
   }
 
   protected function execute($arguments = array(), $options = array())
@@ -38,9 +40,14 @@ class opKdtGenerateMemberTask extends sfBaseTask
 
       $member->setName(sprintf($options['name-format'], $member->getId()));
       $member->save();
-      $member->setConfig('pc_address', 'sns'.$member->getId().'@example.com');
-      $member->setConfig('mobile_address', 'sns'.$member->getId().'@example.com');
-      $member->setConfig('password', md5('password'));
+
+      $address = sprintf($options['mail-address-format'], $member->getId());
+      $member->setConfig('pc_address', $address);
+      $member->setConfig('mobile_address', $address);
+
+      $password = preg_replace("/%d/", $member->getId(), $options['password-format'], 1);
+      $member->setConfig('password', md5($password));
+
       $this->logSection('member+', $member->getName());
       if (isset($linkMember))
       {
