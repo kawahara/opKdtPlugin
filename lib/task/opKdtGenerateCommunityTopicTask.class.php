@@ -1,27 +1,24 @@
 <?php
 
-class opKdtGenerateCommunityTopicTask extends sfBaseTask
+class opKdtGenerateCommunityTopicTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'generate-community-topic';
 
     require sfConfig::get('sf_data_dir').'/version.php';
 
     $this->addOptions(
       array(
-        new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', null),
-        new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
         new sfCommandOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of community topics', 10),
       )
     );
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
     $communities = Doctrine::getTable('Community')->findAll(Doctrine::HYDRATE_ARRAY);
     foreach ($communities as $community)
     {

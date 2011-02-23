@@ -1,20 +1,14 @@
 <?php
 
-class opKdtGenerateAllTask extends sfBaseTask
+class opKdtGenerateAllTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'generate-all';
 
     require sfConfig::get('sf_data_dir').'/version.php';
-
-    $this->addOptions(
-      array(
-        new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', null),
-        new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-      )
-    );
 
     $this->briefDescription = 'Generate Data for Test';
     $this->detailedDescription = <<<EOF
@@ -25,7 +19,7 @@ Call it with:
 EOF;
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
     $tasks = array(
       'GenerateMember',

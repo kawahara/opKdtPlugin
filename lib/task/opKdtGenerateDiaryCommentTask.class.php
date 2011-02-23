@@ -1,28 +1,26 @@
 <?php
 
-class opKdtGenerateDiaryCommentTask extends sfBaseTask
+class opKdtGenerateDiaryCommentTask extends opKdtBaseTask
 {
   protected $memberIds = array();
 
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'generate-diary-comment';
 
     require sfConfig::get('sf_data_dir').'/version.php';
 
     $this->addOptions(
       array(
-        new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', null),
-        new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
         new sfCommandOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of diary comments', 5),
       )
     );
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
     $this->memberIds = array_map(create_function('$m', 'return $m[\'id\'];'), Doctrine::getTable('Member')->findAll(Doctrine::HYDRATE_ARRAY));
 
     $diaries = Doctrine::getTable('Diary')->findAll(Doctrine::HYDRATE_ARRAY);

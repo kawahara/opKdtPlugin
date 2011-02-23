@@ -1,27 +1,24 @@
 <?php
 
-class opKdtSendMessageTask extends sfBaseTask
+class opKdtSendMessageTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'send-message';
 
     require sfConfig::get('sf_data_dir').'/version.php';
 
     $this->addOptions(
       array(
-        new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', null),
-        new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
         new sfCommandOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of send messages', 10),
       )
     );
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
     $members = Doctrine::getTable('Member')->findAll(Doctrine::HYDRATE_ARRAY);
     $memberIds = array_map(create_function('$m', 'return (int)$m[\'id\'];'), $members);
 

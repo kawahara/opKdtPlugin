@@ -1,23 +1,20 @@
 <?php
 
-class opKdtJoinMemberToCommunityTask extends sfBaseTask
+class opKdtJoinMemberToCommunityTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'join-member-to-community';
 
     require sfConfig::get('sf_data_dir').'/version.php';
 
-    $this->addOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', true);
-    $this->addOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev');
     $this->addOption('community', 'c', sfCommandOption::PARAMETER_REQUIRED, "Community Id", 1);
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
     $c = (int)$options['community'];
     $community = Doctrine::getTable('Community')->find($c);
     if (!$community)

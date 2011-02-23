@@ -1,14 +1,13 @@
 <?php
 
-class opKdtGenerateMemberTask extends sfBaseTask
+class opKdtGenerateMemberTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'generate-member';
 
-    $this->addOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', true);
-    $this->addOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev');
     $this->addOption('link', 'l', sfCommandOption::PARAMETER_REQUIRED, 'Who links?', null);
     $this->addOption('name-format', null, sfCommandOption::PARAMETER_REQUIRED, "Member's Name format", 'dummy%d');
     $this->addOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of added members', 10);
@@ -16,10 +15,8 @@ class opKdtGenerateMemberTask extends sfBaseTask
     $this->addOption('password-format', null, sfCommandOption::PARAMETER_REQUIRED, 'Password format', 'password');
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
     $n = (int)$options['number'];
     $link = $options['link'];
     if (null !== $link)

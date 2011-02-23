@@ -1,27 +1,24 @@
 <?php
 
-class opKdtJoinCommunityTask extends sfBaseTask
+class opKdtJoinCommunityTask extends opKdtBaseTask
 {
   protected function configure()
   {
-    $this->namespace = 'opKdt';
+    parent::configure();
+
     $this->name      = 'join-community';
 
     require sfConfig::get('sf_data_dir').'/version.php';
 
     $this->addOptions(
       array(
-        new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application', null),
-        new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
         new sfCommandOption('number', null, sfCommandOption::PARAMETER_REQUIRED, 'Number of joined communities', 10),
       )
     );
   }
 
-  protected function execute($arguments = array(), $options = array())
+  protected function executeTransaction($conn, $arguments = array(), $options = array())
   {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
     $members = Doctrine::getTable('Member')->findAll(Doctrine::HYDRATE_ARRAY);
     $communities = Doctrine::getTable('Community')->findAll(Doctrine::HYDRATE_ARRAY);
     if (count($communities) < $options['number'])
