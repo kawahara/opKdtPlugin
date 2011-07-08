@@ -39,28 +39,44 @@ class opKdtGenerateMemberTask extends opKdtBaseTask
       $member->save();
 
       $address = sprintf($options['mail-address-format'], $member->getId());
-      $member->setConfig('pc_address', $address);
-      $member->setConfig('mobile_address', $address);
+      self::setMemberConfig($member->id, 'pc_address', $address);
+      self::setMemberConfig($member->id, 'mobile_address', $address);
 
       $password = preg_replace("/%d/", $member->getId(), $options['password-format'], 1);
-      $member->setConfig('password', md5($password));
+      self::setMemberConfig($member->id, 'password', md5($password));
 
       $this->logSection('member+', $member->getName());
       if (isset($linkMember))
       {
         $memberRelationship1 = new MemberRelationship();
-        $memberRelationship1->setMember($member);
-        $memberRelationship1->setMemberRelatedByMemberIdFrom($linkMember);
+        $memberRelationship1->setMemberIdTo($member->id);
+        $memberRelationship1->setMemberIdFrom($linkMember->id);
         $memberRelationship1->setIsFriend(true);
         $memberRelationship1->save();
+        $memberRelationship1->free(true);
 
         $memberRelationship2 = new MemberRelationship();
-        $memberRelationship2->setMember($linkMember);
-        $memberRelationship2->setMemberRelatedByMemberIdFrom($member);
+        $memberRelationship2->setMemberIdTo($linkMember->id);
+        $memberRelationship2->setMemberIdFrom($member->id);
         $memberRelationship2->setIsFriend(true);
         $memberRelationship2->save();
+        $memberRelationship2->free(true);
         $this->logSection('friend link', sprintf("%s - %s", $linkMember->getId(), $member->getId()));
       }
+
+      $member->free(true);
     }
+  }
+
+  // MemberConfigTableメモリリーク対策
+  // 重複チェックをしていないため新規項目以外に使用してはならない
+  static protected function setMemberConfig($memberId, $name, $value)
+  {
+    $config = new MemberConfig();
+    $config->member_id = $memberId;
+    $config->name = $name;
+    $config->value = $value;
+    $config->save();
+    $config->free(true);
   }
 }
